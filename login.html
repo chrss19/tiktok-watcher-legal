@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in with TikTok</title>
+<style>body{font-family:system-ui,sans-serif;max-width:640px;margin:48px auto;padding:0 16px;line-height:1.5}button{padding:10px 18px;background:#111;color:#fff;border:0;border-radius:6px;font-size:16px;cursor:pointer}</style>
+</head>
+<body>
+<h1>Log in with TikTok</h1>
+<p>The app asks for two permissions: <b>user.info.basic</b> (identify the signed-in account) and <b>video.list</b> (read the owner's own list of videos and their public counts).</p>
+<button id="go">Continue to TikTok</button>
+<script>
+// Client key is public (not a secret). The client secret is NEVER put on this page.
+var CLIENT_KEY = "sbaw869t3qfjs33g44";
+var REDIRECT = "https://chrss19.github.io/tiktok-watcher-legal/callback";
+document.getElementById("go").onclick = function () {
+  var state = crypto.getRandomValues(new Uint32Array(4)).join("");
+  try { sessionStorage.setItem("tt_state", state); } catch (e) {}
+  var url = "https://www.tiktok.com/v2/auth/authorize/" +
+    "?client_key=" + encodeURIComponent(CLIENT_KEY) +
+    "&response_type=code" +
+    "&scope=" + encodeURIComponent("user.info.basic,video.list") +
+    "&redirect_uri=" + encodeURIComponent(REDIRECT) +
+    "&state=" + encodeURIComponent(state);
+  location.href = url;
+};
+</script>
+</body>
+</html>

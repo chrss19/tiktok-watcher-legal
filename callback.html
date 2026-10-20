@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TikTok sign-in result</title>
+<style>body{font-family:system-ui,sans-serif;max-width:640px;margin:48px auto;padding:0 16px;line-height:1.5}pre{background:#f4f4f4;padding:12px;border-radius:6px;white-space:pre-wrap;word-break:break-all}</style>
+</head>
+<body>
+<h1>TikTok sign-in result</h1>
+<p id="msg">Reading result…</p>
+<pre id="out"></pre>
+<script>
+// Nothing is sent anywhere: the page only shows the values on screen.
+var p = new URLSearchParams(location.search);
+var saved = null;
+try { saved = sessionStorage.getItem("tt_state"); } catch (e) {}
+var msg = document.getElementById("msg"), out = document.getElementById("out");
+if (p.get("error")) {
+  msg.textContent = "Sign-in failed.";
+  out.textContent = "error: " + p.get("error") + "\n" + (p.get("error_description") || "");
+} else if (p.get("code")) {
+  var ok = saved && saved === p.get("state");
+  msg.textContent = ok ? "Signed in. Copy the code below into the local script (it is valid only briefly)."
+                       : "Signed in, but the state check did not match. Do not use this code; start again from the login page.";
+  out.textContent = "code: " + p.get("code") + "\nscopes: " + (p.get("scopes") || "");
+} else {
+  msg.textContent = "No sign-in data in this address.";
+}
+</script>
+</body>
+</html>
